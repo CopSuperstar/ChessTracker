@@ -1,0 +1,6 @@
+@ChessTracker_HostAddress = http://localhost:5216
+
+GET {{ChessTracker_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
