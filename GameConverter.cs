@@ -21,6 +21,12 @@ static (Result gameResult, EndingCausedBy endingCausedBy) ConvertResult(ChessCom
         "timeout" => EndingCausedBy.Time,
         "resigned" => EndingCausedBy.Resignation,
         "abandoned" => EndingCausedBy.Abandonment,
+        "repetition" => EndingCausedBy.Repetition,
+        "stalemate" => EndingCausedBy.Stalemate, 
+        "agreed" => EndingCausedBy.Agreed,
+        "insufficient" => EndingCausedBy.Insufficient, 
+        "timevsinsufficient" => EndingCausedBy.Timevsinsufficient,
+        "50move" => EndingCausedBy.Fiftymove,
         _ => throw new Exception($"Unknown result: {loser.Result}")
     };
     
@@ -35,13 +41,14 @@ static (Result gameResult, EndingCausedBy endingCausedBy) ConvertResult(ChessCom
             BlackName = game.Black.Username,
             ChessComGameId = game.Uuid
         };
+        string openingName = game.Eco.Substring(game.Eco.LastIndexOf('/')+1);
         DateTime timeTransitional = DateTime.UnixEpoch.AddSeconds(game.EndTime); 
         MappedReport.GameTime = timeTransitional; var tuple = ConvertResult(game);
         MappedReport.GameResult = tuple.gameResult;
         MappedReport.EndingCausedBy = tuple.endingCausedBy;
         MappedReport.WhiteRating = game.White.Rating;
         MappedReport.BlackRating = game.Black.Rating;
-        MappedReport.ecoCode = game.Eco;
+        MappedReport.ecoCode = openingName;
         MappedReport.analysisLink = game.Url;
         MappedReport.WhiteAccuracy = game.Accuracies.White;
         MappedReport.BlackAccuracy = game.Accuracies.Black;

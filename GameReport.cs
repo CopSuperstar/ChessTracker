@@ -13,8 +13,13 @@
 
         Abandonment,
         Agreement,
-        Resignation
-    }
+        Resignation,
+        Repetition,
+        Agreed,
+        Insufficient,
+        Timevsinsufficient,
+        Fiftymove
+}
 public record GameReport
 {
     public string ChessComGameId {get; set;}= ""; 

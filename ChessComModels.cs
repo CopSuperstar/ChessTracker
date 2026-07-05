@@ -9,7 +9,6 @@ class ChessComGame
 {
     public string Url { get; set; } = "";
     [JsonPropertyName("end_time")]
-    
     public long EndTime { get; set; }
     [JsonPropertyName("rated")]
     public bool Rated { get; set; }

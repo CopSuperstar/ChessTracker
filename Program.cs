@@ -16,9 +16,9 @@ var connectionString = "Data Source=chess.db";
 
 Database.Initialize(connectionString);
 
-app.MapGet("/api/games/fetch", async () =>
+app.MapGet("/api/games/fetch", async (string username) =>
 {
-    var url = "https://api.chess.com/pub/player/21tillmate/games/2026/05";
+    var url = $"https://api.chess.com/pub/player/{username}/games/2026/05";
     var json = await httpClient.GetStringAsync(url);
     
     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -30,11 +30,16 @@ app.MapGet("/api/games/fetch", async () =>
     foreach(ChessComGame game in response.Games)
     {
         GameReport report = Converter.ConvertReport(game);
-        if(game.Rated ){
+        if(game.Rated){
             counter += Database.InsertGame(report, connection);
             }
     }
     return Results.Ok(counter);
+}
+);
+app.MapGet("/api/games/openings", async  (string username) =>{
+    var sorting = await Database.SortingOpenings(connectionString, username);
+    return sorting;
 });
 
 app.Run();

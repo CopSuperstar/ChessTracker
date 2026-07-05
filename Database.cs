@@ -20,7 +20,6 @@ analysisLink TEXT NOT NULL,
 ecoCode TEXT NOT NULL,
 WhiteAccuracy REAL, 
 BlackAccuracy REAL
-
 )");
     }
     public static int InsertGame(GameReport game, SqliteConnection connection)
@@ -39,18 +38,7 @@ BlackAccuracy REAL
  ecoCode, 
  WhiteAccuracy, 
  BlackAccuracy) 
- VALUES (@ChessComGameId,
- @WhiteName,
- @BlackName,
- @GameTime, 
- @GameResult,
- @EndingCausedBy,
- @WhiteRating, 
- @BlackRating, 
- @analysisLink, 
- @ecoCode,
- @WhiteAccuracy,
- @BlackAccuracy)", 
+ VALUES (@ChessComGameId, @WhiteName, @BlackName, @GameTime, @GameResult, @EndingCausedBy, @WhiteRating, @BlackRating, @analysisLink, @ecoCode, @WhiteAccuracy, @BlackAccuracy)", 
  new {
     game.ChessComGameId,
     game.WhiteName,
@@ -64,8 +52,29 @@ BlackAccuracy REAL
     game.ecoCode,
     game.WhiteAccuracy,
     game.BlackAccuracy
-}); return 1;
-  }
-  else return 0;
+ }); return 1;
+        }
+        else return 0;
+    }
+    
+    public static async Task<IEnumerable<OpeningStats>>  SortingOpenings(string connectionString , string username )
+    {
+        using var connection = new SqliteConnection(connectionString);
+        connection.Open();
+        var OpeningStats_result = await connection.QueryAsync<OpeningStats>(@"SELECT ecoCode,
+        COUNT(ChessComGameId) AS games_played,
+        AVG(CASE WHEN WhiteName =  @Username THEN WhiteAccuracy ELSE BlackAccuracy END) AS average_accuracy
+        FROM Games
+        GROUP BY ecoCode
+        ORDER BY average_accuracy DESC",
+                new { Username = username }
+                );
+        return OpeningStats_result;
     }
 }
+    public class OpeningStats
+    {
+        public string EcoCode {get;set;}
+        public int games_played {get;set;}
+        public double average_accuracy {get;set;}
+    }
