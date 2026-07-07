@@ -30,3 +30,7 @@ class ChessComPlayer
 
     public string Username {get; set;} = "";
 }
+class ChessComArchives {
+    [JsonPropertyName("archives")]
+    public List<string> Archives { get; set; } = new();
+}

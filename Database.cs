@@ -65,7 +65,7 @@ BlackAccuracy REAL
         COUNT(ChessComGameId) AS games_played,
         AVG(CASE WHEN WhiteName =  @Username THEN WhiteAccuracy ELSE BlackAccuracy END) AS average_accuracy
         FROM Games
-        GROUP BY ecoCode
+       GROUP BY ecoCode
         ORDER BY average_accuracy DESC",
                 new { Username = username }
                 );
