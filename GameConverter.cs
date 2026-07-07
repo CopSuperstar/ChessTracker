@@ -30,7 +30,7 @@ static (Result gameResult, EndingCausedBy endingCausedBy) ConvertResult(ChessCom
         _ => throw new Exception($"Unknown result: {loser.Result}")
     };
     
-    return (gameResult: gameResult, endingCause:endingCausedBy);
+    return (gameResult: gameResult, endingCausedBy:endingCausedBy);
 }
 
     static public GameReport ConvertReport(ChessComGame game)

@@ -74,7 +74,7 @@ BlackAccuracy REAL
 }
     public class OpeningStats
     {
-        public string EcoCode {get;set;}
+        public string? EcoCode {get;set;}
         public int games_played {get;set;}
         public double average_accuracy {get;set;}
     }

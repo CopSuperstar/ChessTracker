@@ -26,7 +26,7 @@ app.MapGet("/api/games/fetch", async (string username) =>
     var archiveJson = await httpClient.GetStringAsync(archiveUrl);
     var archiveList = JsonSerializer.Deserialize<ChessComArchives>(archiveJson, options);
 
-    foreach (string? URL in archiveList.Archives)
+    foreach (string? URL in archiveList!.Archives)
     {
         var json = await httpClient.GetStringAsync(URL);
         var response = JsonSerializer.Deserialize<ChessComResponse>(json, options);
