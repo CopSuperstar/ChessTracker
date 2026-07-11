@@ -5,10 +5,10 @@ using MyChess;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+{ app.MapOpenApi(); }
+
 app.UseHttpsRedirection();
 var httpClient = new HttpClient();
 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("ChessTracker/1.0");
@@ -40,13 +40,14 @@ app.MapGet("/api/games/fetch", async (string username) =>
             }
         }
     }
-        return Results.Ok(counter);
-}
-);
-app.MapGet("/api/games/openings", async (string username) =>
-{
-    var sorting = await Database.SortingOpenings(connectionString, username);
-    return sorting;
+    return Results.Ok(counter);
 });
+app.MapGet("/api/games/openings", async (string username) => { return await Database.SortingOpenings(connectionString, username); });
+
+app.MapGet("/api/games/bycolor", async (string username) => { return await Database.PerformanceForColor(connectionString, username); });
+
+app.MapGet("/api/games/monthly_comparison", async (string username) => { return await Database.MonthlyPerformance(connectionString, username); });
+
+app.MapGet("/api/games/endings", async (string username) => { return await Database.WinRateByEndings(connectionString, username); });
 
 app.Run();
